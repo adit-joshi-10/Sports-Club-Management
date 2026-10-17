@@ -1,0 +1,13 @@
+# Secrets and environments
+.env
+venv/
+__pycache__/
+*.pyc
+
+# Flutter / build output
+frontend/build/
+frontend/.dart_tool/
+
+# Editor / OS
+.vscode/
+.DS_Store
