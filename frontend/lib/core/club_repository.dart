@@ -7,6 +7,7 @@ class ClubRepository {
 
   final ApiClient api;
 
+  // ---- sports ----
   Future<List<Sport>> sports() async {
     final data = await api.get('/sports') as List<dynamic>;
     return data
@@ -26,14 +27,33 @@ class ClubRepository {
 
   Future<void> deleteSport(int id) => api.delete('/sports/$id');
 
+  // ---- members ----
   Future<Member> myProfile() async {
     final data = await api.get('/members/me');
     return Member.fromJson(data as Map<String, dynamic>);
   }
 
-  /// Admin only (the server enforces it).
-  Future<int> memberCount() async {
-    final data = await api.get('/members') as List<dynamic>;
-    return data.length;
+  /// Admin only (the server enforces it). [search] is matched on the server.
+  Future<List<Member>> members({String? search}) async {
+    final q = search?.trim() ?? '';
+    final data = await api.get('/members',
+        query: q.isEmpty ? null : {'search': q}) as List<dynamic>;
+    return data
+        .map((e) => Member.fromJson(e as Map<String, dynamic>))
+        .toList();
   }
+
+  Future<int> memberCount() async => (await members()).length;
+
+  Future<Member> createMember(Map<String, dynamic> body) async {
+    final data = await api.post('/members', body: body);
+    return Member.fromJson(data as Map<String, dynamic>);
+  }
+
+  Future<Member> updateMember(int id, Map<String, dynamic> body) async {
+    final data = await api.patch('/members/$id', body: body);
+    return Member.fromJson(data as Map<String, dynamic>);
+  }
+
+  Future<void> deleteMember(int id) => api.delete('/members/$id');
 }

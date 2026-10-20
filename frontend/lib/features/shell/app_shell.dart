@@ -8,6 +8,7 @@ import '../../theme/arena_theme.dart';
 import '../../theme/role_style.dart';
 import '../../widgets/sport/pitch_background.dart';
 import '../dashboard/dashboard_screen.dart';
+import '../members/members_screen.dart';
 import '../sports/sports_screen.dart';
 
 class _Dest {
@@ -28,9 +29,11 @@ class AppShell extends StatefulWidget {
 class _AppShellState extends State<AppShell> {
   int _index = 0;
 
-  // Only modules that exist on the backend. 5b-2 adds Members for admins.
+  // Only modules that exist on the backend. Members is admin-only.
   List<_Dest> _destinations(ClubRole role) => [
         _Dest('DASHBOARD', Icons.dashboard_rounded, () => const DashboardScreen()),
+        if (role == ClubRole.admin)
+          _Dest('PLAYERS', Icons.groups_rounded, () => const MembersScreen()),
         _Dest('SPORTS', Icons.sports_soccer_rounded, () => const SportsScreen()),
       ];
 

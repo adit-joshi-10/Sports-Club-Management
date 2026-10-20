@@ -1,4 +1,3 @@
-
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -7,8 +6,10 @@ import 'core/auth_state.dart';
 import 'core/club_repository.dart';
 import 'features/auth/login_screen.dart';
 import 'features/shell/app_shell.dart';
+import 'models/app_user.dart';
 import 'theme/arena_colors.dart';
 import 'theme/arena_theme.dart';
+import 'theme/role_style.dart';
 import 'widgets/sport/ball_loader.dart';
 
 void main() {
@@ -23,57 +24,47 @@ class ScmsApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MultiProvider(
       providers: [
-        // Shared API client
-        Provider<ApiClient>(
-          create: (_) => ApiClient(),
-        ),
-
-        // Repository used by dashboard and sports screens
+        Provider<ApiClient>(create: (_) => ApiClient()),
         Provider<ClubRepository>(
-          create: (ctx) => ClubRepository(
-            ctx.read<ApiClient>(),
-          ),
+          create: (ctx) => ClubRepository(ctx.read<ApiClient>()),
         ),
-
-        // Authentication state
         ChangeNotifierProvider<AuthState>(
-          create: (ctx) => AuthState(
-            ctx.read<ApiClient>(),
-          )..restore(),
+          create: (ctx) => AuthState(ctx.read<ApiClient>())..restore(),
         ),
       ],
-      child: MaterialApp(
-        title: 'SCMS | Sports Club',
-        debugShowCheckedModeBanner: false,
-        theme: ArenaTheme.build(Arena.orange),
-        home: const _Root(),
-      ),
+      child: const _ArenaApp(),
     );
   }
 }
 
-/// Chooses the screen according to the authentication state.
+/// Sits below the providers so the whole theme can follow the signed-in role.
+class _ArenaApp extends StatelessWidget {
+  const _ArenaApp();
+
+  @override
+  Widget build(BuildContext context) {
+    final role = context.select<AuthState, ClubRole?>((a) => a.user?.role);
+    return MaterialApp(
+      title: 'SCMS | Sports Club',
+      debugShowCheckedModeBanner: false,
+      theme: ArenaTheme.build(role?.accent ?? Arena.orange),
+      home: const _Root(),
+    );
+  }
+}
+
+/// Chooses the screen from the session state.
 class _Root extends StatelessWidget {
   const _Root();
 
   @override
   Widget build(BuildContext context) {
-    final status = context.select<AuthState, AuthStatus>(
-      (auth) => auth.status,
-    );
-
+    final status = context.select<AuthState, AuthStatus>((a) => a.status);
     final Widget screen = switch (status) {
-      AuthStatus.unknown => const FullScreenLoader(
-          key: ValueKey('boot'),
-        ),
-      AuthStatus.signedOut => const LoginScreen(
-          key: ValueKey('login'),
-        ),
-      AuthStatus.signedIn => const AppShell(
-          key: ValueKey('app-shell'),
-        ),
+      AuthStatus.unknown => const FullScreenLoader(key: ValueKey('boot')),
+      AuthStatus.signedOut => const LoginScreen(key: ValueKey('login')),
+      AuthStatus.signedIn => const AppShell(key: ValueKey('shell')),
     };
-
     return AnimatedSwitcher(
       duration: const Duration(milliseconds: 450),
       child: screen,
