@@ -5,8 +5,6 @@ import '../../core/auth_state.dart';
 import '../../core/club_repository.dart';
 import '../../models/app_user.dart';
 import '../../models/club_models.dart';
-import '../../theme/arena_colors.dart';
-import '../../theme/arena_theme.dart';
 import '../../theme/role_style.dart';
 import '../../widgets/sport/arena_widgets.dart';
 import '../../widgets/sport/jersey_card.dart';
@@ -28,17 +26,15 @@ class DashboardScreen extends StatelessWidget {
             title: user.role.zone,
             subtitle: 'Welcome, ${user.displayName}',
           ),
-          _body(user.role),
+          switch (user.role) {
+            ClubRole.admin => const _AdminBoard(),
+            ClubRole.coach => const _CoachBoard(),
+            ClubRole.member => const _MemberBoard(),
+          },
         ],
       ),
     );
   }
-
-  Widget _body(ClubRole role) => switch (role) {
-        ClubRole.admin => const _AdminBoard(),
-        ClubRole.coach => const _CoachBoard(),
-        ClubRole.member => const _MemberBoard(),
-      };
 }
 
 class _AdminBoard extends StatelessWidget {
@@ -47,36 +43,25 @@ class _AdminBoard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final repo = context.read<ClubRepository>();
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        FutureSection<(int, int)>(
-          load: () async {
-            final sports = await repo.sports();
-            final members = await repo.memberCount();
-            return (members, sports.length);
-          },
-          builder: (context, data) => Wrap(
-            spacing: 20,
-            runSpacing: 20,
-            children: [
-              ScoreboardCard(
-                  label: 'MEMBERS', value: data.$1, icon: Icons.groups_rounded),
-              ScoreboardCard(
-                  label: 'SPORTS',
-                  value: data.$2,
-                  icon: Icons.sports_soccer_rounded),
-            ],
-          ),
-        ),
-        const SizedBox(height: 28),
-        const BenchCard(items: [
-          'Coach management',
-          'Training schedules',
-          'Registrations overview',
-          'Attendance overview',
-        ]),
+    return FutureSection<List<int>>(
+      load: () async => [
+        (await repo.members()).length,
+        (await repo.coaches()).length,
+        (await repo.sports()).length,
+        (await repo.sessions()).length,
+        (await repo.allRegistrations()).length,
       ],
+      builder: (context, c) => Wrap(
+        spacing: 20,
+        runSpacing: 20,
+        children: [
+          ScoreboardCard(label: 'PLAYERS', value: c[0], icon: Icons.groups_rounded),
+          ScoreboardCard(label: 'COACHES', value: c[1], icon: Icons.sports_rounded),
+          ScoreboardCard(label: 'SPORTS', value: c[2], icon: Icons.sports_soccer_rounded),
+          ScoreboardCard(label: 'SESSIONS', value: c[3], icon: Icons.event_rounded),
+          ScoreboardCard(label: 'SIGN-UPS', value: c[4], icon: Icons.assignment_ind_rounded),
+        ],
+      ),
     );
   }
 }
@@ -87,24 +72,26 @@ class _CoachBoard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final repo = context.read<ClubRepository>();
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        FutureSection<int>(
-          load: () async => (await repo.sports()).length,
-          builder: (context, count) => ScoreboardCard(
-            label: 'SPORTS IN THE CLUB',
-            value: count,
-            icon: Icons.sports_soccer_rounded,
-          ),
-        ),
-        const SizedBox(height: 28),
-        const BenchCard(items: [
-          'My training schedules',
-          'Team sheet and attendance marking',
-          'Attendance history',
-        ]),
-      ],
+    return FutureSection<List<int>>(
+      load: () async {
+        final sessions = await repo.sessions();
+        final marks = await repo.attendance();
+        final today = todayIso();
+        return [
+          sessions.length,
+          sessions.where((s) => s.sessionDate == today).length,
+          marks.length,
+        ];
+      },
+      builder: (context, c) => Wrap(
+        spacing: 20,
+        runSpacing: 20,
+        children: [
+          ScoreboardCard(label: 'MY SESSIONS', value: c[0], icon: Icons.event_rounded),
+          ScoreboardCard(label: 'TODAY', value: c[1], icon: Icons.today_rounded),
+          ScoreboardCard(label: 'MARKS MADE', value: c[2], icon: Icons.fact_check_rounded),
+        ],
+      ),
     );
   }
 }
@@ -115,72 +102,44 @@ class _MemberBoard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final repo = context.read<ClubRepository>();
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        FutureSection<(Member, int)>(
-          load: () async {
-            final me = await repo.myProfile();
-            final sports = await repo.sports();
-            return (me, sports.length);
-          },
-          builder: (context, data) => Wrap(
-            spacing: 28,
-            runSpacing: 24,
-            crossAxisAlignment: WrapCrossAlignment.start,
-            children: [
-              JerseyCard(name: data.$1.fullName, number: data.$1.memberId),
-              Column(
-                mainAxisSize: MainAxisSize.min,
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  ScoreboardCard(
-                    label: 'SPORTS AVAILABLE',
-                    value: data.$2,
-                    icon: Icons.sports_soccer_rounded,
-                  ),
-                  const SizedBox(height: 16),
-                  _InfoTile(label: 'MEMBER SINCE', value: data.$1.joinedOn),
-                ],
-              ),
-            ],
-          ),
-        ),
-        const SizedBox(height: 28),
-        const BenchCard(items: [
-          'Register for a sport',
-          'My training schedule',
-          'My attendance',
-        ]),
-      ],
-    );
-  }
-}
-
-class _InfoTile extends StatelessWidget {
-  const _InfoTile({required this.label, required this.value});
-
-  final String label;
-  final String value;
-
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      width: 250,
-      padding: const EdgeInsets.all(16),
-      decoration: BoxDecoration(
-        color: Arena.stand.withValues(alpha: .7),
-        borderRadius: BorderRadius.circular(16),
-        border: Border.all(color: Colors.white12),
-      ),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Text(label, style: ArenaText.display(16, color: Arena.mist, spacing: 2.4)),
-          const SizedBox(height: 4),
-          Text(value, style: ArenaText.digits(30, color: Arena.chalk)),
-        ],
-      ),
+    return FutureSection<(Member, List<int>)>(
+      load: () async {
+        final me = await repo.myProfile();
+        final regs = await repo.myRegistrations();
+        final sessions = await repo.sessions();
+        final att = await repo.myAttendance();
+        return (
+          me,
+          [
+            regs.length,
+            sessions.length,
+            att.where((a) => a.status != 'absent').length,
+          ],
+        );
+      },
+      builder: (context, data) {
+        final c = data.$2;
+        return Wrap(
+          spacing: 28,
+          runSpacing: 24,
+          crossAxisAlignment: WrapCrossAlignment.start,
+          children: [
+            JerseyCard(name: data.$1.fullName, number: data.$1.memberId),
+            Wrap(
+              spacing: 20,
+              runSpacing: 20,
+              children: [
+                ScoreboardCard(
+                    label: 'MY SPORTS', value: c[0], icon: Icons.how_to_reg_rounded),
+                ScoreboardCard(
+                    label: 'MY SESSIONS', value: c[1], icon: Icons.event_rounded),
+                ScoreboardCard(
+                    label: 'ATTENDED', value: c[2], icon: Icons.check_circle_rounded),
+              ],
+            ),
+          ],
+        );
+      },
     );
   }
 }

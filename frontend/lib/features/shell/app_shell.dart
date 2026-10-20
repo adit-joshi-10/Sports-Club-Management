@@ -8,7 +8,11 @@ import '../../theme/arena_theme.dart';
 import '../../theme/role_style.dart';
 import '../../widgets/sport/pitch_background.dart';
 import '../dashboard/dashboard_screen.dart';
+import '../attendance/attendance_screen.dart';
+import '../coaches/coaches_screen.dart';
 import '../members/members_screen.dart';
+import '../registrations/registrations_screen.dart';
+import '../schedule/sessions_screen.dart';
 import '../sports/sports_screen.dart';
 
 class _Dest {
@@ -30,12 +34,32 @@ class _AppShellState extends State<AppShell> {
   int _index = 0;
 
   // Only modules that exist on the backend. Members is admin-only.
-  List<_Dest> _destinations(ClubRole role) => [
-        _Dest('DASHBOARD', Icons.dashboard_rounded, () => const DashboardScreen()),
-        if (role == ClubRole.admin)
+    List<_Dest> _destinations(ClubRole role) {
+    final dash = _Dest('DASHBOARD', Icons.dashboard_rounded, () => const DashboardScreen());
+    final sports = _Dest('SPORTS', Icons.sports_soccer_rounded, () => const SportsScreen());
+    final sessions = _Dest('SESSIONS', Icons.event_rounded, () => const SessionsScreen());
+    final attendance =
+        _Dest('ATTENDANCE', Icons.fact_check_rounded, () => const AttendanceScreen());
+    return switch (role) {
+      ClubRole.admin => [
+          dash,
           _Dest('PLAYERS', Icons.groups_rounded, () => const MembersScreen()),
-        _Dest('SPORTS', Icons.sports_soccer_rounded, () => const SportsScreen()),
-      ];
+          _Dest('COACHES', Icons.sports_rounded, () => const CoachesScreen()),
+          sports,
+          sessions,
+          _Dest('SIGN-UPS', Icons.assignment_ind_rounded, () => const RegistrationsScreen()),
+          attendance,
+        ],
+      ClubRole.coach => [dash, sessions, attendance, sports],
+      ClubRole.member => [
+          dash,
+          sports,
+          _Dest('MY SPORTS', Icons.how_to_reg_rounded, () => const RegistrationsScreen()),
+          sessions,
+          attendance,
+        ],
+    };
+  }
 
   @override
   Widget build(BuildContext context) {
