@@ -1,0 +1,221 @@
+﻿===== APPLICATION FILES =====
+.git
+.vscode
+backend
+database
+docs
+frontend
+.gitignore
+clean_report.txt
+project_structure.txt
+.vscode\settings.json
+backend\app
+backend\devtools
+backend\venv
+backend\.env.example
+backend\requirements.txt
+backend\app\api
+backend\app\core
+backend\app\db
+backend\app\models
+backend\app\schemas
+backend\app\services
+backend\app\__pycache__
+backend\app\main.py
+backend\app\__init__.py
+backend\app\api\__pycache__
+backend\app\api\auth.py
+backend\app\api\coaches.py
+backend\app\api\deps.py
+backend\app\api\members.py
+backend\app\api\router.py
+backend\app\api\sports.py
+backend\app\api\__init__.py
+backend\app\core\__pycache__
+backend\app\core\config.py
+backend\app\core\errors.py
+backend\app\core\security.py
+backend\app\core\__init__.py
+backend\app\db\__pycache__
+backend\app\db\base.py
+backend\app\db\session.py
+backend\app\db\__init__.py
+backend\app\models\__pycache__
+backend\app\models\sport.py
+backend\app\models\user.py
+backend\app\models\__init__.py
+backend\app\schemas\__pycache__
+backend\app\schemas\auth.py
+backend\app\schemas\coach.py
+backend\app\schemas\member.py
+backend\app\schemas\sport.py
+backend\app\schemas\__init__.py
+backend\app\services\__pycache__
+backend\app\services\auth_service.py
+backend\app\services\coach_service.py
+backend\app\services\member_service.py
+backend\app\services\sport_service.py
+backend\app\services\__init__.py
+backend\devtools\api.ps1
+backend\devtools\common.ps1
+backend\devtools\test_members.ps1
+backend\devtools\test_sports.ps1
+database\make_seed.py
+database\schema.sql
+database\seed.sql
+frontend\.dart_tool
+frontend\.idea
+frontend\android
+frontend\build
+frontend\lib
+frontend\test
+frontend\web
+frontend\windows
+frontend\.flutter-plugins-dependencies
+frontend\.gitignore
+frontend\.metadata
+frontend\analysis_options.yaml
+frontend\frontend.iml
+frontend\pubspec.lock
+frontend\pubspec.yaml
+frontend\README.md
+frontend\scms_app.iml
+frontend\android\app
+frontend\android\gradle
+frontend\android\.gitignore
+frontend\android\build.gradle.kts
+frontend\android\frontend_android.iml
+frontend\android\gradle.properties
+frontend\android\gradlew
+frontend\android\gradlew.bat
+frontend\android\local.properties
+frontend\android\settings.gradle.kts
+frontend\android\app\src
+frontend\android\app\build.gradle.kts
+frontend\android\app\src\debug
+frontend\android\app\src\main
+frontend\android\app\src\profile
+frontend\android\app\src\debug\AndroidManifest.xml
+frontend\android\app\src\main\java
+frontend\android\app\src\main\kotlin
+frontend\android\app\src\main\res
+frontend\android\app\src\main\AndroidManifest.xml
+frontend\android\app\src\main\java\io
+frontend\android\app\src\main\java\io\flutter
+frontend\android\app\src\main\java\io\flutter\plugins
+frontend\android\app\src\main\java\io\flutter\plugins\GeneratedPluginRegistrant.java
+frontend\android\app\src\main\kotlin\com
+frontend\android\app\src\main\kotlin\com\example
+frontend\android\app\src\main\kotlin\com\example\frontend
+frontend\android\app\src\main\kotlin\com\example\frontend\MainActivity.kt
+frontend\android\app\src\main\res\drawable
+frontend\android\app\src\main\res\drawable-v21
+frontend\android\app\src\main\res\mipmap-hdpi
+frontend\android\app\src\main\res\mipmap-mdpi
+frontend\android\app\src\main\res\mipmap-xhdpi
+frontend\android\app\src\main\res\mipmap-xxhdpi
+frontend\android\app\src\main\res\mipmap-xxxhdpi
+frontend\android\app\src\main\res\values
+frontend\android\app\src\main\res\values-night
+frontend\android\app\src\main\res\drawable\launch_background.xml
+frontend\android\app\src\main\res\drawable-v21\launch_background.xml
+frontend\android\app\src\main\res\mipmap-hdpi\ic_launcher.png
+frontend\android\app\src\main\res\mipmap-mdpi\ic_launcher.png
+frontend\android\app\src\main\res\mipmap-xhdpi\ic_launcher.png
+frontend\android\app\src\main\res\mipmap-xxhdpi\ic_launcher.png
+frontend\android\app\src\main\res\mipmap-xxxhdpi\ic_launcher.png
+frontend\android\app\src\main\res\values\styles.xml
+frontend\android\app\src\main\res\values-night\styles.xml
+frontend\android\app\src\profile\AndroidManifest.xml
+frontend\android\gradle\wrapper
+frontend\android\gradle\wrapper\gradle-wrapper.jar
+frontend\android\gradle\wrapper\gradle-wrapper.properties
+frontend\lib\core
+frontend\lib\features
+frontend\lib\models
+frontend\lib\theme
+frontend\lib\widgets
+frontend\lib\main.dart
+frontend\lib\core\api_client.dart
+frontend\lib\core\auth_state.dart
+frontend\lib\core\club_repository.dart
+frontend\lib\features\auth
+frontend\lib\features\dashboard
+frontend\lib\features\shell
+frontend\lib\features\sports
+frontend\lib\features\auth\login_screen.dart
+frontend\lib\features\dashboard\dashboard_screen.dart
+frontend\lib\features\shell\app_shell.dart
+frontend\lib\features\sports\sports_screen.dart
+frontend\lib\features\sports\sport_form_dialog.dart
+frontend\lib\models\app_user.dart
+frontend\lib\models\club_models.dart
+frontend\lib\theme\arena_colors.dart
+frontend\lib\theme\arena_theme.dart
+frontend\lib\theme\role_style.dart
+frontend\lib\widgets\sport
+frontend\lib\widgets\sport\arena_widgets.dart
+frontend\lib\widgets\sport\ball_loader.dart
+frontend\lib\widgets\sport\card_banner.dart
+frontend\lib\widgets\sport\goal_burst.dart
+frontend\lib\widgets\sport\jersey_card.dart
+frontend\lib\widgets\sport\pitch_background.dart
+frontend\lib\widgets\sport\scoreboard_card.dart
+frontend\lib\widgets\sport\sport_card.dart
+frontend\web\icons
+frontend\web\favicon.png
+frontend\web\index.html
+frontend\web\manifest.json
+frontend\web\icons\Icon-192.png
+frontend\web\icons\Icon-512.png
+frontend\web\icons\Icon-maskable-192.png
+frontend\web\icons\Icon-maskable-512.png
+frontend\windows\flutter
+frontend\windows\runner
+frontend\windows\.gitignore
+frontend\windows\CMakeLists.txt
+frontend\windows\flutter\ephemeral
+frontend\windows\flutter\CMakeLists.txt
+frontend\windows\flutter\generated_plugins.cmake
+frontend\windows\flutter\generated_plugin_registrant.cc
+frontend\windows\flutter\generated_plugin_registrant.h
+frontend\windows\flutter\ephemeral\.plugin_symlinks
+frontend\windows\runner\resources
+frontend\windows\runner\CMakeLists.txt
+frontend\windows\runner\flutter_window.cpp
+frontend\windows\runner\flutter_window.h
+frontend\windows\runner\main.cpp
+frontend\windows\runner\resource.h
+frontend\windows\runner\runner.exe.manifest
+frontend\windows\runner\Runner.rc
+frontend\windows\runner\utils.cpp
+frontend\windows\runner\utils.h
+frontend\windows\runner\win32_window.cpp
+frontend\windows\runner\win32_window.h
+frontend\windows\runner\resources\app_icon.ico
+
+===== GIT STATUS =====
+ M frontend/lib/theme/arena_theme.dart
+?? clean_report.txt
+?? frontend/lib/core/club_repository.dart
+?? frontend/lib/features/dashboard/
+?? frontend/lib/features/shell/
+?? frontend/lib/features/sports/
+?? frontend/lib/models/club_models.dart
+?? frontend/lib/theme/role_style.dart
+?? frontend/lib/widgets/sport/arena_widgets.dart
+?? frontend/lib/widgets/sport/goal_burst.dart
+?? frontend/lib/widgets/sport/jersey_card.dart
+?? frontend/lib/widgets/sport/scoreboard_card.dart
+?? frontend/lib/widgets/sport/sport_card.dart
+?? project_structure.txt
+
+===== RECENT COMMITS =====
+a651935 Milestone 4b members + Stage 5a Arena login
+edd10e4 Milestone 4b: members CRUD with transactions and search
+a27aada Milestone 4a: sports CRUD with role guards
+503bc3b Milestones 0-3: schema, seed, FastAPI auth
+
+===== TRACKED CHANGE SUMMARY =====
+ frontend/lib/theme/arena_theme.dart | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)

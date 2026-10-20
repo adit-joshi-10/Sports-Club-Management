@@ -1,4 +1,6 @@
+
 """SCMS API entry point."""
+
 from fastapi import Depends, FastAPI, HTTPException, Request
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import JSONResponse
@@ -13,26 +15,45 @@ from app.db.session import get_db
 
 settings = get_settings()
 
-app = FastAPI(title="SCMS API", version="0.3.0",
-              description="Sports Club Management System: backend API")
+app = FastAPI(
+    title="SCMS API",
+    version="0.3.0",
+    description="Sports Club Management System: backend API",
+)
 
+# Allow the Flutter web frontend to communicate with FastAPI.
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=settings.cors_origin_list,
-    allow_methods=["GET", "POST", "PUT", "PATCH", "DELETE"],
-    allow_headers=["Authorization", "Content-Type"],
+    allow_origins=[
+        "http://localhost:5000",
+        "http://127.0.0.1:5000",
+        "http://localhost:5001",
+        "http://127.0.0.1:5001",
+    ],
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
 )
 
 
 @app.exception_handler(AppError)
 async def app_error_handler(_request: Request, exc: AppError):
-    return JSONResponse(status_code=exc.status_code, content={"detail": exc.detail})
+    return JSONResponse(
+        status_code=exc.status_code,
+        content={"detail": exc.detail},
+    )
 
 
 @app.exception_handler(Exception)
-async def unhandled_error_handler(_request: Request, _exc: Exception):
-    # Never leak stack traces to clients
-    return JSONResponse(status_code=500, content={"detail": "Internal server error"})
+async def unhandled_error_handler(
+    _request: Request,
+    _exc: Exception,
+):
+    # Never leak stack traces to clients.
+    return JSONResponse(
+        status_code=500,
+        content={"detail": "Internal server error"},
+    )
 
 
 app.include_router(api_router)
@@ -42,7 +63,17 @@ app.include_router(api_router)
 def health(db: Session = Depends(get_db)):
     """Proves the API is up and MySQL is reachable."""
     try:
-        users = db.execute(text("SELECT COUNT(*) FROM users")).scalar_one()
+        users = db.execute(
+            text("SELECT COUNT(*) FROM users")
+        ).scalar_one()
     except SQLAlchemyError:
-        raise HTTPException(status_code=503, detail="Database unavailable")
-    return {"status": "ok", "database": "connected", "users": users}
+        raise HTTPException(
+            status_code=503,
+            detail="Database unavailable",
+        )
+
+    return {
+        "status": "ok",
+        "database": "connected",
+        "users": users,
+    }

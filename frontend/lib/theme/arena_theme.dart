@@ -61,7 +61,7 @@ class ArenaTheme {
         style: FilledButton.styleFrom(
           backgroundColor: accent,
           foregroundColor: Arena.night,
-          minimumSize: const Size.fromHeight(54),
+          minimumSize: const Size(0, 54),
           shape:
               RoundedRectangleBorder(borderRadius: BorderRadius.circular(14)),
           textStyle: ArenaText.display(22, spacing: 2.2),
